@@ -12,4 +12,8 @@ public class JoinDTO {
     private String password;
 
     private String email;
+
+
+    // 0을 남자, 1을 여자로 상정
+    private Boolean gender;
 }

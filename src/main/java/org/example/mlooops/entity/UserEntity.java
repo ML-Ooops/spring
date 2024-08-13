@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long userId;
 
     @Column(nullable = false, unique = true, length = 255)
     private String username;
@@ -25,5 +25,8 @@ public class UserEntity {
     private String passwordHash;
 
     @Column(name = "signupDate", nullable = false)
-    private LocalDateTime signupDate;
+    private LocalDateTime createdAt;
+    // 0을 남자, 1을 여자로 상정
+    @Column(nullable = false)
+    private Boolean gender;
 }

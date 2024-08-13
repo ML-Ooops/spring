@@ -53,8 +53,9 @@ public class SecurityConfig {
 //경로별 인가 작업
         http
                 .authorizeHttpRequests((auth)-> auth
-                        .requestMatchers("/login", "/test", "/join", "/").permitAll()
-                        .anyRequest().authenticated());
+//                        .requestMatchers("/login", "/test", "/join", "/interest/join").permitAll()
+//                        .anyRequest().authenticated());
+                                .anyRequest().permitAll()); // 모든 요청 허용
 //        http
 //                .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
 //
