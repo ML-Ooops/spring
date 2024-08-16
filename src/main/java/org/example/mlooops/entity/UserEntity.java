@@ -29,4 +29,7 @@ public class UserEntity {
     // 0을 남자, 1을 여자로 상정
     @Column(nullable = false)
     private Boolean gender;
+
+    private String role;
+
 }

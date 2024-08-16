@@ -1,5 +1,9 @@
 package org.example.mlooops.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.mlooops.jwt.JWTFilter;
+import org.example.mlooops.jwt.JWTUtil;
+import org.example.mlooops.jwt.LoginFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,13 +21,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-//    private final AuthenticationConfiguration authenticationConfiguration;
-////    private JWTUtil jwtUtil;
-//
-//    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil){
-//        this.authenticationConfiguration=authenticationConfiguration;
-//        this.jwtUtil=jwtUtil;
-//    }
+    private final AuthenticationConfiguration authenticationConfiguration;
+    private JWTUtil jwtUtil;
+    private ObjectMapper objectMapper=new ObjectMapper();
+
+    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil){
+        this.authenticationConfiguration=authenticationConfiguration;
+        this.jwtUtil=jwtUtil;
+    }
 
 
 
@@ -55,13 +60,14 @@ public class SecurityConfig {
                 .authorizeHttpRequests((auth)-> auth
 //                        .requestMatchers("/login", "/test", "/join", "/interest/join").permitAll()
 //                        .anyRequest().authenticated());
-                                .anyRequest().permitAll()); // 모든 요청 허용
-//        http
-//                .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
-//
-//
-//        http
-//                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
+                        .requestMatchers("/login", "/test", "/join", "/interest/join").permitAll()
+                        .anyRequest().authenticated());// 모든 요청 허용
+        http
+                .addFilterBefore(new JWTFilter(jwtUtil, objectMapper), LoginFilter.class);
+
+
+        http
+                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
 
         //세션 설정
