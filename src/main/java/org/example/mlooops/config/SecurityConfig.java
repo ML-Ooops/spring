@@ -61,7 +61,7 @@ public class SecurityConfig {
 //                        .requestMatchers("/login", "/test", "/join", "/interest/join").permitAll()
 //                        .anyRequest().authenticated());
                         .requestMatchers("/login", "/test", "/join", "/interest/join").permitAll()
-                        .anyRequest().authenticated());// 모든 요청 허용
+                        .anyRequest().authenticated());
         http
                 .addFilterBefore(new JWTFilter(jwtUtil, objectMapper), LoginFilter.class);
 

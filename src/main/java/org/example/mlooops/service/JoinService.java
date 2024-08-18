@@ -40,6 +40,7 @@ public class JoinService {
         data.setPasswordHash(bCryptPasswordEncoder.encode(password));
         data.setCreatedAt(LocalDateTime.now());
         data.setGender(gender);
+        data.setRole("ROLE_USER");
 
         userRepository.save(data);
 
