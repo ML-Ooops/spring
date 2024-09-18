@@ -22,7 +22,6 @@ public class JoinService {
         String password = joinDTO.getPassword();
         String email = joinDTO.getEmail();
         // 0을 남자, 1을 여자로 상정
-        Boolean gender = joinDTO.getGender();
 
         Boolean isExists = userRepository.existsByUsername(username);
         if(isExists){
@@ -39,7 +38,6 @@ public class JoinService {
         data.setEmail(email);
         data.setPasswordHash(bCryptPasswordEncoder.encode(password));
         data.setCreatedAt(LocalDateTime.now());
-        data.setGender(gender);
         data.setRole("ROLE_USER");
 
         userRepository.save(data);

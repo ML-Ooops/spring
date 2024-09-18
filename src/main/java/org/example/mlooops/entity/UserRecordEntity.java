@@ -9,21 +9,17 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@Table(name = "UserRecord")
+@Table(name = "UserNewsRecord")
 public class UserRecordEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int RecordId;
-    @Column(name = "user_id", nullable = false)
-    private int userId;
+    @Column(name = "email", nullable = false)
+    private String email;
     @Column(name = "news_id", nullable = false)
-    private int newsId;
+    private String newsId;
 
     @Column(name = "Record_at")
     private LocalDateTime updatedAt;
 
-    @PreUpdate
-    protected void onUpdate() {
-        updatedAt = LocalDateTime.now();
-    }
 }

@@ -20,8 +20,8 @@ public class JWTUtil {
     public JWTUtil(@Value("${spring.jwt.secret}")String secret){
         this.secretKey=new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), Jwts.SIG.HS256.key().build().getAlgorithm());
     }
-    public String getUsername(String token){
-        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("username", String.class);
+    public String getEmail(String token){
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("email", String.class);
     }
     public String getRoles(String token){
         return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("role", String.class);
@@ -48,11 +48,11 @@ public class JWTUtil {
     public String generateNewToken(String refreshToken) {
         Claims claims=Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(refreshToken).getPayload();
 
-        String username = claims.get("username", String.class);
+        String email = claims.get("email", String.class);
         String role = claims.get("role", String.class);
 
         return Jwts.builder()
-                .claim("username", username)
+                .claim("email", email)
                 .claim("role", role)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + 60*60*10L))
@@ -63,18 +63,18 @@ public class JWTUtil {
 
 
 
-    public String createJWT(String username, String role, Long expiredMs){
+    public String createJWT(String email, String role, Long expiredMs){
         return Jwts.builder()
-                .claim("username", username)
+                .claim("email", email)
                 .claim("role", role)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + expiredMs))
                 .signWith(secretKey)
                 .compact();
     }
-    public String createRefreshJWT(String username, String role, Long expiredMS){
+    public String createRefreshJWT(String email, String role, Long expiredMS){
         return Jwts.builder()
-                .claim("username", username)
+                .claim("email", email)
                 .claim("role", role)
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() +expiredMS))

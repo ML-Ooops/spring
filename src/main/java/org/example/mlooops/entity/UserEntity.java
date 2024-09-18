@@ -27,8 +27,6 @@ public class UserEntity {
     @Column(name = "signupDate", nullable = false)
     private LocalDateTime createdAt;
     // 0을 남자, 1을 여자로 상정
-    @Column(nullable = false)
-    private Boolean gender;
 
     private String role;
 
