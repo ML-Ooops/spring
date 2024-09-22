@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.mlooops.jwt.JWTFilter;
 import org.example.mlooops.jwt.JWTUtil;
 import org.example.mlooops.jwt.LoginFilter;
+import org.example.mlooops.service.JwtBlacklistService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,9 +25,10 @@ public class SecurityConfig {
     private final AuthenticationConfiguration authenticationConfiguration;
     private JWTUtil jwtUtil;
     private ObjectMapper objectMapper=new ObjectMapper();
-
-    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil){
+    private JwtBlacklistService jwtBlacklistService;
+    public SecurityConfig(AuthenticationConfiguration authenticationConfiguration, JWTUtil jwtUtil, JwtBlacklistService jwtBlacklistService){
         this.authenticationConfiguration=authenticationConfiguration;
+        this.jwtBlacklistService=jwtBlacklistService;
         this.jwtUtil=jwtUtil;
     }
 
@@ -63,7 +65,7 @@ public class SecurityConfig {
                         .requestMatchers("/login", "/test", "/join", "/interest/join", "/interest/init").permitAll()
                         .anyRequest().authenticated());
         http
-                .addFilterBefore(new JWTFilter(jwtUtil, objectMapper), LoginFilter.class);
+                .addFilterBefore(new JWTFilter(jwtUtil, objectMapper,jwtBlacklistService), LoginFilter.class);
 
 
         http

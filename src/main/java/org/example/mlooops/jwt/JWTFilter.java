@@ -6,6 +6,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.example.mlooops.service.JwtBlacklistService;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -19,12 +20,13 @@ public class JWTFilter extends OncePerRequestFilter {
 
     private final JWTUtil jwtUtil;
 //    private final ObjectMapper objectMapper;
-    public JWTFilter(JWTUtil jwtUtil, ObjectMapper objectMapper) {
 
+    private JwtBlacklistService jwtBlacklistService;
+    public JWTFilter(JWTUtil jwtUtil, ObjectMapper objectMapper, JwtBlacklistService jwtBlacklistService) {
+        this.jwtBlacklistService=jwtBlacklistService;
         this.jwtUtil = jwtUtil;
 //        this.objectMapper=objectMapper;
     }
-
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -42,9 +44,16 @@ public class JWTFilter extends OncePerRequestFilter {
             return;
         }
 
-        System.out.println("authorization now");
         //Bearer 부분 제거 후 순수 토큰만 획득
         String token = authorization.split(" ")[1];
+
+        // 로그아웃 검증
+        if (jwtBlacklistService.isBlacklisted(token)) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("로그아웃된 사용자입니다.");
+            return;
+        }
+        
         //토큰 소멸 시간 검증
         if (jwtUtil.isExpired(token)) {
 

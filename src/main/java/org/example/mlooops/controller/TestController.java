@@ -4,7 +4,9 @@ import org.example.mlooops.DTOtoFastAPI.Request.ContentSimilarityRequest;
 import org.example.mlooops.DTOtoFastAPI.Response.ContentSimilarityResponse;
 import org.example.mlooops.DTOtoFastAPI.Response.NewsCategoryResponse;
 import org.example.mlooops.dto.NewsRecommendDTO;
+import org.example.mlooops.jwt.LoginFilter;
 import org.example.mlooops.service.CustomUserDetailsService;
+import org.example.mlooops.service.JwtBlacklistService;
 import org.example.mlooops.service.NewsService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,10 +21,12 @@ public class TestController {
 
     private final NewsService newsService;
     private final CustomUserDetailsService customUserDetailsService;
+    private final JwtBlacklistService jwtBlacklistService;
 
-    public TestController(NewsService newsService, CustomUserDetailsService customUserDetailsService) {
+    public TestController(NewsService newsService, CustomUserDetailsService customUserDetailsService, JwtBlacklistService jwtBlacklistService) {
         this.newsService = newsService;
         this.customUserDetailsService = customUserDetailsService;
+        this.jwtBlacklistService = jwtBlacklistService;
     }
 
 //    @PostMapping("/test")
@@ -51,6 +55,13 @@ public class TestController {
 
     @GetMapping("/sample")
     public String sampleApi() {
+
         return "Hello, Spring REST Docs!";
     }
+    @GetMapping("/blacklist")
+    public String blackLsit() {
+        System.out.println(jwtBlacklistService.getBlacklistedTokens());
+        return "Hello, Spring REST Docs!";
+    }
+
 }
