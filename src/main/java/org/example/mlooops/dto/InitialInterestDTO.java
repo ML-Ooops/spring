@@ -6,6 +6,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class InitialInterestDTO {
-    private int userId;
-    private double[] categoryInterest;
+    private String email;
+    private float[] categoryInterest;
 }

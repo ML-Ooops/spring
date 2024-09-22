@@ -21,9 +21,9 @@ public class UserInterestEntity {
     private int categoryId;
 
     @Column(name = "category_Double", nullable = false)
-    private double categoryDouble;
+    private float categoryDouble;
 
-    public UserInterestEntity(int userId, int categoryId, double categoryDouble) {
+    public UserInterestEntity(int userId, int categoryId, float categoryDouble) {
         this.userId = userId;
         this.categoryId = categoryId;
         this.categoryDouble = categoryDouble;

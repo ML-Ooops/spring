@@ -60,7 +60,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests((auth)-> auth
 //                        .requestMatchers("/login", "/test", "/join", "/interest/join").permitAll()
 //                        .anyRequest().authenticated());
-                        .requestMatchers("/login", "/test", "/join", "/interest/join").permitAll()
+                        .requestMatchers("/login", "/test", "/join", "/interest/join", "/interest/init").permitAll()
                         .anyRequest().authenticated());
         http
                 .addFilterBefore(new JWTFilter(jwtUtil, objectMapper), LoginFilter.class);
