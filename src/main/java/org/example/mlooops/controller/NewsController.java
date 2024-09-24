@@ -1,8 +1,12 @@
 package org.example.mlooops.controller;
 
+import org.example.mlooops.DTOtoFastAPI.Request.ContentSimilarityRequest;
+import org.example.mlooops.DTOtoFastAPI.Request.RandomRequest;
 import org.example.mlooops.DTOtoFastAPI.Response.NewsAllResponse;
 import org.example.mlooops.DTOtoFastAPI.Response.NewsCategoryResponse;
+import org.example.mlooops.dto.NewsRecommendDTO;
 import org.example.mlooops.dto.RecordDTO;
+import org.example.mlooops.service.CustomUserDetailsService;
 import org.example.mlooops.service.NewsService;
 import org.example.mlooops.service.ResponseData;
 import org.example.mlooops.service.UserRecordService;
@@ -19,10 +23,12 @@ import java.util.List;
 public class NewsController {
     private final UserRecordService userRecordService;
     private final NewsService newsService;
+    private final CustomUserDetailsService customUserDetailsService;
 
-    public NewsController(UserRecordService userRecordService, NewsService newsService) {
+    public NewsController(UserRecordService userRecordService, NewsService newsService, CustomUserDetailsService customUserDetailsService) {
         this.userRecordService = userRecordService;
         this.newsService = newsService;
+        this.customUserDetailsService = customUserDetailsService;
     }
 
     @PostMapping("/news/record")
@@ -56,6 +62,21 @@ public class NewsController {
     public List<NewsCategoryResponse> ShowAllCategoryRecords() {
         return newsService.getNewsCategory();
     }
+
+    @PostMapping("/news/recommendation/content")
+    public List<NewsAllResponse> RecommendContent(@RequestBody NewsRecommendDTO request) {
+        float[] temp=customUserDetailsService.getUserCategory(request.getEmail());
+        ContentSimilarityRequest contentSimilarityRequest=new ContentSimilarityRequest();
+        contentSimilarityRequest.setCategoryArray(temp);
+        contentSimilarityRequest.setTopN(request.getTopN());
+        return newsService.getSimilarityRecommendations(contentSimilarityRequest);
+    }
+
+    @PostMapping("/news/recommendation/random")
+    public List<NewsAllResponse> RecommendRandom(@RequestBody RandomRequest request) {
+        return newsService.getRandomNews(request);
+    }
+
 
 
 }
