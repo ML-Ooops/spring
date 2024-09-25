@@ -33,10 +33,7 @@ public class NewsController {
 
     @PostMapping("/news/record")
     public ResponseEntity<ResponseData> RecordProcess(@RequestBody RecordDTO recordDTO) {
-        System.out.println(1);
-        System.out.println("newID: " + recordDTO.getNewsId());
-        System.out.println("newID: " + recordDTO.getEmail());
-        System.out.println(1);
+        System.out.println("start api");
         int result = userRecordService.addUserRecord(recordDTO);
         ResponseData data;
         switch (result) {
